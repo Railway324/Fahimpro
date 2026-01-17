@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finorix Ai Chart Bot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src='//libtl.com/sdk.js' data-zone='10473871' data-sdk='show_10473871'></script>
+
+    <style>
+        :root {
+            --primary-pink: #ff007f;
+            --soft-pink: #ffe6f2;
+            --ash-bg: #374151; /* Mud/Ash Color */
+            --ash-dark: #1f2937;
+            --neon-green: #00ff88;
+            --text-main: #f3f4f6;
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --glass: rgba(255, 255, 255, 0.05);
+            --red-candle: #ff4757;
+            --green-candle: #2ed573;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif; /* Premium Font */
+        }
+
+        body {
+            overflow-x: hidden;
+            background: #111;
+            color: var(--text-main);
+        }
+
+        /* Utility Classes */
+        .hidden { display: none !important; }
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .app-container {
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            background: var(--ash-dark);
+        }
+
+        /* --- 1. Login Page Styles --- */
+        #login-page {
+            background: linear-gradient(135deg, var(--primary-pink), #ffffff);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .glowing-text {
+            color: #fff;
+            font-size: 28px;
+            font-weight: 800;
+            text-shadow: 0 0 15px rgba(255, 0, 127, 0.6);
+            margin-bottom: 50px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 35px;
+            border-radius: 25px;
+            width: 100%;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+
+        .login-box h3 { color: #333; margin-bottom: 25px; font-weight: 700; }
+        
+        .input-group { margin-bottom: 15px; text-align: left; }
+        .input-group label { color: #444; font-size: 13px; font-weight: 700; margin-bottom: 5px; display: block;}
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            outline: none;
+            font-size: 14px;
+            background: #f9fafb;
+            color: #333;
+        }
+        .input-group input:focus { border-color: var(--primary-pink); background: #fff; }
+
+        .btn-signup {
+            background: var(--primary-pink);
+            color: white;
+            margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(255, 0, 127, 0.3);
+        }
+
+        /* --- 2. Home Page Styles --- */
+        #home-page {
+            /* Ash/Mud Gradient Background */
+            background: linear-gradient(to bottom, #4b5563, #1f2937);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 20px;
+            border-radius: 18px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .user-info { display: flex; align-items: center; gap: 12px; }
+        .user-icon { font-size: 32px; color: var(--neon-green); }
+        .user-details h4 { font-size: 16px; margin: 0; font-weight: 700; }
+        .user-details p { font-size: 12px; color: #d1d5db; margin: 0; }
+        
+        .credit-box {
+            background: rgba(0,0,0,0.3);
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .menu-card {
+            background: var(--card-bg);
+            padding: 25px 15px;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.08);
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .menu-card:active { transform: scale(0.96); }
+        .menu-card i { font-size: 28px; margin-bottom: 12px; color: var(--neon-green); }
+        .menu-card h3 { font-size: 15px; font-weight: 600; }
+
+        /* Future Signal Button - Updated to Pink */
+        .btn-future {
+            background: var(--primary-pink); /* Pink Color */
+            color: #fff;
+            box-shadow: 0 0 20px rgba(255, 0, 127, 0.4);
+            margin-bottom: 30px;
+        }
+
+        /* Rules & Support Section */
+        .info-section {
+            background: rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            border: 1px dashed rgba(255,255,255,0.2);
+        }
+        .info-section h3 {
+            font-size: 16px;
+            color: var(--neon-green);
+            margin-bottom: 15px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        .rules-list {
+            list-style: none;
+            text-align: left;
+        }
+        .rules-list li {
+            font-size: 12px;
+            color: #e5e7eb;
+            margin-bottom: 10px;
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+        }
+        .rules-list li i { color: var(--primary-pink); margin-top: 3px; }
+
+        .footer-support {
+            text-align: center;
+            margin-top: 10px;
+            padding: 15px;
+        }
+        .footer-support a {
+            color: #38bdf8;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(56, 189, 248, 0.1);
+            padding: 10px 20px;
+            border-radius: 30px;
+        }
+
+        /* --- 3. Analysis Page Styles --- */
+        #analysis-page {
+            background: radial-gradient(circle at top, #1f2937, #111);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .back-btn {
+            background: transparent;
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.3);
+            width: auto;
+            padding: 8px 20px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .market-select, .file-upload-wrapper {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            background: #000;
+            color: #fff;
+            border: 1px solid #444;
+            border-radius: 10px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-analyze {
+            background: linear-gradient(90deg, #10b981, #059669);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Result Display */
+        .result-container {
+            margin-top: 25px;
+            background: #171717;
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid #333;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .signal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #333;
+        }
+        .market-name { font-size: 20px; font-weight: 800; color: #fff; }
+        .signal-badge {
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 16px;
+            letter-spacing: 1px;
+        }
+        .bg-buy { background: var(--green-candle); color: #000; box-shadow: 0 0 10px var(--green-candle); }
+        .bg-sell { background: var(--red-candle); color: #fff; box-shadow: 0 0 10px var(--red-candle); }
+
+        .signal-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .info-box {
+            background: #262626;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #404040;
+        }
+        .info-label { font-size: 11px; color: #9ca3af; margin-bottom: 4px; display: block; }
+        .info-value { font-size: 15px; font-weight: 700; color: #fff; }
+
+        .logic-box {
+            background: #262626;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 13px;
+            color: #e5e7eb;
+            line-height: 1.6;
+            border-left: 4px solid var(--neon-green);
+        }
+
+        /* Loading Overlay */
+        #loading {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            flex-direction: column;
+        }
+        .loader {
+            border: 4px solid #333;
+            border-top: 4px solid var(--primary-pink);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <div id="loading" class="hidden">
+            <div class="loader"></div>
+            <p style="margin-top: 15px; font-weight: 600; color: var(--primary-pink);">FINORIX AI ANALYZING...</p>
+        </div>
+
+        <section id="login-page">
+            <h1 class="glowing-text">Welcome Finorix Ai</h1>
+            <div class="login-box">
+                <h3>Create Account</h3>
+                <div class="input-group">
+                    <label>TELEGRAM NAME</label>
+                    <input type="text" id="tg-name" placeholder="Ex: John Doe">
+                </div>
+                <div class="input-group">
+                    <label>USERNAME</label>
+                    <input type="text" id="tg-username" placeholder="Ex: @johndoe">
+                </div>
+                <button class="btn btn-signup" onclick="handleSignup()">Sign Up Now</button>
+            </div>
+        </section>
+
+        <section id="home-page" class="hidden">
+            <div class="header">
+                <div class="user-info">
+                    <i class="fas fa-user-circle user-icon"></i>
+                    <div class="user-details">
+                        <h4 id="display-name">User</h4>
+                        <p id="display-username">@user</p>
+                    </div>
+                </div>
+                <div class="credit-box">
+                    <i class="fas fa-coins"></i> <span id="credit-balance">0</span>
+                </div>
+            </div>
+
+            <div class="menu-grid">
+                <div class="menu-card" id="free-credit-btn" onclick="watchAdForCredit()">
+                    <i class="fas fa-gift"></i>
+                    <h3>Free Credit</h3>
+                    <p style="font-size: 11px; color: #9ca3af; margin-top:5px;">Get +3 Credits</p>
+                </div>
+                <div class="menu-card" onclick="navigateTo('analysis-page')">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Ai Chart</h3>
+                    <p style="font-size: 11px; color: #9ca3af; margin-top:5px;">Analyze Market</p>
+                </div>
+            </div>
+
+            <button class="btn btn-future" onclick="openFutureSignal()">
+                <i class="fas fa-rocket" style="margin-right: 8px;"></i> Future Signal
+            </button>
+
+            <div class="info-section">
+                <h3><i class="fas fa-book"></i> Market Rules</h3>
+                <ul class="rules-list">
+                    <li><i class="fas fa-check-circle"></i> Always check trend direction before entry.</li>
+                    <li><i class="fas fa-check-circle"></i> Use 1 step Martingale (MTG) if needed.</li>
+                    <li><i class="fas fa-check-circle"></i> Don't trade during high-impact news.</li>
+                    <li><i class="fas fa-check-circle"></i> Respect support & resistance levels.</li>
+                    <li><i class="fas fa-check-circle"></i> Maintain money management strictly.</li>
+                </ul>
+            </div>
+
+            <div class="footer-support">
+                <a href="https://t.me/finorixproai" target="_blank">
+                    <i class="fab fa-telegram"></i> Telegram Support
+                </a>
+            </div>
+        </section>
+
+        <section id="analysis-page" class="hidden">
+            <button class="btn back-btn" onclick="navigateTo('home-page')"><i class="fas fa-arrow-left"></i> Back</button>
+            
+            <div class="market-select">
+                <label style="display:block; margin-bottom:8px; color:#9ca3af; font-size: 12px; font-weight:600;">SELECT MARKET PAIR</label>
+                <select id="market-pair">
+                    <option value="" disabled selected>Choose a pair...</option>
+                    <optgroup label="Real Market">
+                        <option value="EUR/JPY">EUR/JPY</option>
+                        <option value="EUR/GBP">EUR/GBP</option>
+                        <option value="EUR/USD">EUR/USD</option>
+                        <option value="USD/JPY">USD/JPY</option>
+                        <option value="CAD/JPY">CAD/JPY</option>
+                    </optgroup>
+                    <optgroup label="OTC Market">
+                        <option value="USD/BRL OTC">USD/BRL OTC</option>
+                        <option value="USD/ARS OTC">USD/ARS OTC</option>
+                        <option value="USD/EGP OTC">USD/EGP OTC</option>
+                        <option value="USD/INR OTC">USD/INR OTC</option>
+                        <option value="USD/BDT OTC">USD/BDT OTC</option>
+                        <option value="USD/IDR OTC">USD/IDR OTC</option>
+                        <option value="USD/ZAR OTC">USD/ZAR OTC</option>
+                        <option value="USD/MXN OTC">USD/MXN OTC</option>
+                        <option value="UK Brent OTC">UK Brent OTC</option>
+                        <option value="BTC/USD OTC">BTC/USD OTC</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <div class="file-upload-wrapper">
+                <label style="display:block; margin-bottom:10px; color:#9ca3af; font-size: 12px; font-weight:600;">UPLOAD CHART IMAGE</label>
+                <input type="file" id="chart-upload" accept="image/*" style="width: 100%; color: #fff; font-size: 12px;">
+                <div id="image-preview" style="margin-top: 15px; max-height: 150px; overflow: hidden; display: none; border-radius: 10px; border: 1px solid #444;">
+                    <img id="preview-img" src="" style="width: 100%; object-fit: cover;">
+                </div>
+            </div>
+
+            <button class="btn btn-analyze" onclick="analyzeChart()">
+                <i class="fas fa-robot" style="margin-right: 8px;"></i> START ANALYSIS
+            </button>
+
+            <div id="result-area" class="result-container hidden">
+                <div class="signal-header">
+                    <span class="market-name" id="res-pair">USD/BRL</span>
+                    <span class="signal-badge" id="res-signal">BUY</span>
+                </div>
+                <div class="signal-grid">
+                    <div class="info-box">
+                        <span class="info-label">ENTRY</span>
+                        <span class="info-value" id="res-time">--:--</span>
+                    </div>
+                    <div class="info-box">
+                        <span class="info-label">DURATION</span>
+                        <span class="info-value" id="res-duration">1 Min</span>
+                    </div>
+                    <div class="info-box">
+                        <span class="info-label">MTG</span>
+                        <span class="info-value" id="res-mtg">1 Step</span>
+                    </div>
+                    <div class="info-box">
+                        <span class="info-label">SURETY</span>
+                        <span class="info-value" id="res-confidence">--%</span>
+                    </div>
+                </div>
+                <div class="logic-box">
+                    <strong>Logic:</strong> <span id="res-logic">Analyzing market structure...</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="future-page" class="hidden">
+            <button class="btn back-btn" onclick="navigateTo('home-page')"><i class="fas fa-arrow-left"></i> Home</button>
+            <h2 style="text-align: center; color: var(--neon-green); margin-bottom: 20px;">FUTURE SIGNALS</h2>
+            
+            <div style="background: #1f2937; padding: 30px; border-radius: 15px; text-align: center; border: 1px dashed #444;">
+                <i class="fas fa-satellite-dish" style="font-size: 40px; color: #444; margin-bottom: 15px;"></i>
+                <p style="color: #9ca3af;"><pre class="signal-box">
+❒ 16:03  ⋅◈⋅  USDIDR  ⋅◈⋅  PUT
+❒ 16:05  ⋅◈⋅  USDBRL  ⋅◈⋅  PUT
+❒ 16:09  ⋅◈⋅  USDIDR  ⋅◈⋅  PUT
+❒ 16:09  ⋅◈⋅  USDBRL  ⋅◈⋅  PUT
+❒ 16:14  ⋅◈⋅  USDIDR  ⋅◈⋅  PUT
+❒ 16:15  ⋅◈⋅  USDBRL  ⋅◈⋅  PUT
+❒ 16:20  ⋅◈⋅  USDIDR  ⋅◈⋅  PUT
+❒ 16:23  ⋅◈⋅  USDIDR  ⋅◈⋅  PUT
+❒ 16:23  ⋅◈⋅  USDBRL  ⋅◈⋅  PUT
+❒ 16:29  ⋅◈⋅  USDIDR  ⋅◈⋅  PUT
+❒ 16:29  ⋅◈⋅  USDBRL  ⋅◈⋅  PUT
+❒ 16:32  ⋅◈⋅  USDIDR  ⋅◈⋅  PUT
+❒ 16:32  ⋅◈⋅  USDBRL  ⋅◈⋅  PUT
+❒ 16:35  ⋅◈⋅  USDBRL  ⋅◈⋅  PUT
+❒ 16:38  ⋅◈⋅  USDBRL  ⋅◈⋅  PUT
+❒ 16:39  ⋅◈⋅  USDIDR  ⋅◈⋅  PUT
+❒ 16:42  ⋅◈⋅  USDBRL  ⋅◈⋅  PUT
+❒ 16:47  ⋅◈⋅  USDIDR  ⋅◈⋅  PUT
+❒ 16:48  ⋅◈⋅  USDBRL  ⋅◈⋅  PUT
+❒ 16:52  ⋅◈⋅  USDIDR  ⋅◈⋅  PUT
+</pre>...</p>
+                <div style="margin-top: 20px;">
+                    <p style="font-size: 12px; color: #666;">Waiting for next update</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // CONFIGURATION: 20 API KEYS ARRAY
+        // নিচের খালি জায়গাগুলোতে আপনার ২০টি কি (Key) বসান। কোটেশনের ভেতর রাখবেন।
+        const API_KEYS = [
+            "AIzaSyA3_1Y7qRg9mhjZE0qA2cHCSEg89kXawQw",
+            "AIzaSyBiR1ygW8PMSeg41Whnz3-kqS8JTrsrMG4",
+            "AIzaSyBeceyuk6AvvbyjtZsgisQiSG31FAlFyzA",
+            "AIzaSyD76cEz8LyO6xZfGJcttgeRYQuutyEMylk",
+            "AIzaSyBN_11FRAQAZDSUItmZJV6Vo7d-esBtE4w",
+            "AIzaSyBsAkaSLRQrIIWN5NaWEj5QVvAZoNX45XA",
+            "AIzaSyDw_xN9SxyzQQg0is5jqxNYVortOGuYOIo",
+            "AIzaSyCmq64iLQ7nybOrxDPo0Ch5m07Jt-IF1nw",
+            "AIzaSyAGYP1fdhp5pKWDEa7JDheaKT8hviQgVfY",
+            "AIzaSyAH4HxIOoC0tlHjmw0Dgad2S_Ail29C1A8",
+            "AIzaSyBS7nFhpfaD9b5v2FVJJG_Gg9cFgsU1E1s",
+            "AIzaSyAEcn6TwEwu-lpQ_8bALDElewKEigZKJxc",
+            "AIzaSyBjvEsmkdiHu8D0CQTmgnWHKYhw73YQZSA",
+            "AIzaSyCl1CfsjmUhHQqaa7eb7KEDWgfPjutekfk",
+            "AIzaSyACInxufVv7JXlb-2dSdioNSQghtAR43js",
+            "AIzaSyAI9KHZXG-GPPvZEhxd0SIoZ97cfAER1k4",
+            "AIzaSyCP0nRu-MvKc5TUWwqZjwZDtWK-HV1xz2Y",
+            "AIzaSyC8R25sAwBXUaJKOkhoJrMs91ktQZ0ZNOQ",
+            "AIzaSyCrHfvPrrhPgn3XPYYiUqcb2-Q62Wtv57c",
+            "AIzaSyAh8PKUq9pXkTeNCczNhaGYLvP--6iZ3oM"
+        ];
+
+        // State
+        let currentUser = null;
+        let credits = 0;
+
+        // --- Init & Data Reset ---
+        window.onload = function() {
+            // Check for Reset Flag (To clear old user data as requested)
+            const isReset = localStorage.getItem('finorix_reset_v2');
+            
+            if (!isReset) {
+                // Clear everything for a fresh start for new users
+                localStorage.clear();
+                localStorage.setItem('finorix_reset_v2', 'true');
+                console.log("System Reset: Old data cleared.");
+            }
+
+            const storedUser = localStorage.getItem('finorix_user');
+            if (storedUser) {
+                currentUser = JSON.parse(storedUser);
+                credits = parseInt(localStorage.getItem('finorix_credits')) || 0;
+                updateUI();
+                navigateTo('home-page');
+                checkCreditCooldown();
+            } else {
+                navigateTo('login-page');
+            }
+        };
+
+        // --- Helper: Get Random API Key ---
+        function getApiKey() {
+            // Filter out placeholder keys
+            const validKeys = API_KEYS.filter(k => k !== "YOUR_API_KEY_1" && k.length > 10);
+            
+            if (validKeys.length === 0) {
+                alert("Please put your API Keys in the code!");
+                return null;
+            }
+            // Pick a random key
+            const randomIndex = Math.floor(Math.random() * validKeys.length);
+            return validKeys[randomIndex];
+        }
+
+        // --- Navigation ---
+        function navigateTo(pageId) {
+            document.querySelectorAll('section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById(pageId).classList.remove('hidden');
+        }
+
+        // --- Auth ---
+        function handleSignup() {
+            const name = document.getElementById('tg-name').value;
+            const username = document.getElementById('tg-username').value;
+
+            if (!name || !username) {
+                alert("Please fill all fields!");
+                return;
+            }
+
+            currentUser = { name, username };
+            credits = 3; // Initial bonus
+            
+            localStorage.setItem('finorix_user', JSON.stringify(currentUser));
+            localStorage.setItem('finorix_credits', credits);
+            
+            updateUI();
+            navigateTo('home-page');
+        }
+
+        function updateUI() {
+            if (currentUser) {
+                document.getElementById('display-name').innerText = currentUser.name;
+                document.getElementById('display-username').innerText = currentUser.username;
+                document.getElementById('credit-balance').innerText = credits;
+            }
+        }
+
+        // --- Ads & Credits ---
+        function checkCreditCooldown() {
+            const lastClaim = localStorage.getItem('finorix_last_ad_claim');
+            const btn = document.getElementById('free-credit-btn');
+            
+            if (lastClaim) {
+                const diff = Date.now() - parseInt(lastClaim);
+                const hours = diff / (1000 * 60 * 60);
+                if (hours < 24) {
+                    btn.style.opacity = "0.5";
+                    btn.style.pointerEvents = "none";
+                    btn.innerHTML = `<i class="fas fa-clock"></i><h3>WAIT</h3><p style="font-size:10px">${(24 - hours).toFixed(1)}H LEFT</p>`;
+                }
+            }
+        }
+
+        function watchAdForCredit() {
+            if (typeof show_10473871 === 'function') {
+                show_10473871().then(() => {
+                    addCredits();
+                });
+            } else {
+                alert('Ad script not loaded (Testing Mode: +3 Credits)');
+                addCredits();
+            }
+        }
+
+        function addCredits() {
+            credits += 3;
+            localStorage.setItem('finorix_credits', credits);
+            localStorage.setItem('finorix_last_ad_claim', Date.now());
+            updateUI();
+            checkCreditCooldown();
+        }
+
+        function openFutureSignal() {
+             if (typeof show_10473871 === 'function') {
+                show_10473871().then(() => {
+                    navigateTo('future-page');
+                });
+            } else {
+                navigateTo('future-page');
+            }
+        }
+
+        // --- Analysis Logic ---
+        const fileInput = document.getElementById('chart-upload');
+        fileInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('preview-img').src = e.target.result;
+                    document.getElementById('image-preview').style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        async function analyzeChart() {
+            if (credits <= 0) {
+                alert("No credits left! Watch ad to get credits.");
+                return;
+            }
+
+            const pair = document.getElementById('market-pair').value;
+            const file = document.getElementById('chart-upload').files[0];
+
+            if (!pair || !file) {
+                alert("Select a pair and upload an image!");
+                return;
+            }
+
+            // Deduct Credit
+            credits--;
+            localStorage.setItem('finorix_credits', credits);
+            updateUI();
+
+            // UI Loading
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('result-area').classList.add('hidden');
+
+            try {
+                const base64Image = await toBase64(file);
+                const isOTC = pair.includes("OTC");
+                
+                let promptText = "";
+                
+                if (isOTC) {
+                    promptText = `মার্কেটের এই চারটি দেখো এটি একটি কটেক্সের বাইনারি অপশন এর 1 min চার্ট, চার্টি সুন্দর করে দেখো আর বুঝ মার্কেটের প্রাইজ অ্যাকশন, Support resistance, বড় বড় ট্রেডাররা ওটিসিতে কোন লজিকে এন্ট্রি দিয়ে থাকে সেই লজিকগুলো প্রয়োগ করবে, ক্যান্ডেল স্টিক প্যাটার্ন গুলো খেয়াল করবে আর অবশ্যই ওটিসি ট্রাপ এড়িয়ে কোন দিকে Signal দিলে সবচেয়ে বেস্ট হবে বা কতর ক্যান্ডেল এ এন্ট্রি দিলে সবচেয়ে বেস্ট হবে সেই টাইম সহ উল্লেখ করবে। Pair: ${pair}. Provide output in JSON format ONLY: {"signal": "BUY/SELL", "time": "HH:MM", "duration": "X min", "confidence": "XX%", "mtg": "Yes/No", "logic": "Explain logic in Bengali shortly"}`;
+                } else {
+                    promptText = `মার্কেটের এই চারটি দেখো এটি একটি কটেক্সের বাইনারি অপশন এর 1 min চার্ট, চার্টি সুন্দর করে দেখো আর বুঝ যদি রিয়েল এই মার্কেটের ব্যাপারে সকল খোঁজখবর সার্চ করে বের করো এবং এটার সাপোর্ট রেসিস্ট্যান্ট বের কর, প্রাইজ একশন বের করো, আর এস আই, রাউন্ড নাম্বার প্লাস রিজেকশন, বিভিন্ন ইন্ডিকেটর ব্যবহার করো. Pair: ${pair}. Provide output in JSON format ONLY: {"signal": "BUY/SELL", "time": "HH:MM", "duration": "X min", "confidence": "XX%", "mtg": "Yes/No", "logic": "Explain logic in Bengali shortly"}`;
+                }
+
+                // Call Gemini API with Random Key
+                const result = await callGeminiAPI(promptText, base64Image);
+                
+                // Parse and Display
+                displayResult(pair, result);
+
+            } catch (error) {
+                alert("Analysis failed. Please try again.");
+                console.error(error);
+            } finally {
+                document.getElementById('loading').classList.add('hidden');
+            }
+        }
+
+        function toBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        async function callGeminiAPI(prompt, imageBase64) {
+            const apiKey = getApiKey();
+            if(!apiKey) throw new Error("No Valid API Key");
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+            
+            const payload = {
+                contents: [{
+                    parts: [
+                        { text: prompt },
+                        { inline_data: { mime_type: "image/jpeg", data: imageBase64 } }
+                    ]
+                }]
+            };
+
+            const response = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error("API Error");
+            }
+
+            const data = await response.json();
+            const textResponse = data.candidates[0].content.parts[0].text;
+            
+            // Clean JSON markdown if present
+            const jsonStr = textResponse.replace(/```json/g, '').replace(/```/g, '').trim();
+            return JSON.parse(jsonStr);
+        }
+
+        function displayResult(pair, data) {
+            const resArea = document.getElementById('result-area');
+            const resSignal = document.getElementById('res-signal');
+            
+            document.getElementById('res-pair').innerText = pair;
+            resSignal.innerText = data.signal.toUpperCase();
+            
+            // Style badge
+            resSignal.className = 'signal-badge ' + (data.signal.toUpperCase().includes('BUY') || data.signal.toUpperCase().includes('UP') ? 'bg-buy' : 'bg-sell');
+
+            document.getElementById('res-time').innerText = data.time;
+            document.getElementById('res-duration').innerText = data.duration;
+            document.getElementById('res-mtg').innerText = data.mtg.toString().toLowerCase().includes('yes') ? '1 STEP' : 'NO';
+            document.getElementById('res-confidence').innerText = data.confidence;
+            document.getElementById('res-logic').innerText = data.logic;
+
+            resArea.classList.remove('hidden');
+        }
+
+    </script>
+</body>
+</html>
